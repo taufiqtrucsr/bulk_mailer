@@ -1,26 +1,19 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "testing";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include("connection.php");
 
 // Retrieve current values from the database
-$sql = "SELECT subject, body, attachment_path FROM email_draft WHERE id = 1 LIMIT 1";
+$sql = "SELECT MAX(id) AS idno, subject, body, attachment_path, from_name, from_email, campaign_name FROM email_draft";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
+    $id = $row['idno']+1;
     $current_subject = $row['subject'];
     $current_body = $row['body'];
     $current_attachment_path = $row['attachment_path'];
+    $current_fromname = $row['from_name'];
+    $current_fromemail = $row['from_email'];
+    $current_campainname = $row['campaign_name'];
 } else {
     // Handle the case where no row exists
     die("No draft found.");
@@ -28,20 +21,23 @@ if ($result->num_rows > 0) {
 
 // Get POST data and use current values if new data is not provided
 $subject = !empty($_POST['subject']) ? filter_var($_POST['subject'], FILTER_SANITIZE_STRING) : $current_subject;
-$body = !empty($_POST['body']) ? filter_var($_POST['body'], FILTER_SANITIZE_STRING) : $current_body;
+$body = !empty($_POST['body']) ? $_POST['body'] : $current_body;
+$fromname = !empty($_POST['fromname']) ? filter_var($_POST['fromname'], FILTER_SANITIZE_STRING) : $current_fromname;
+$fromemail = !empty($_POST['fromemail']) ? filter_var($_POST['fromemail'], FILTER_SANITIZE_STRING) : $current_fromemail;
+$campainname = !empty($_POST['campaingname']) ? filter_var($_POST['campaingname'], FILTER_SANITIZE_STRING) : $current_campainname;
 
 // Handle file upload
 $attachment_path = $current_attachment_path;
 if (!empty($_FILES['attachment']['name'])) {
-    $target_dir = "C:\\Users\\neera\\Downloads\\";
+    $target_dir = TARGET_DIR;
     $attachment_path = $target_dir . basename($_FILES['attachment']['name']);
     move_uploaded_file($_FILES['attachment']['tmp_name'], $attachment_path);
 }
 
-// Update the row with new or existing data
-$sql = "UPDATE email_draft SET subject = ?, body = ?, attachment_path = ? WHERE id = 1";
+$sql = "INSERT INTO email_draft (id, subject, body, attachment_path, from_name, from_email, campaign_name) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sss", $subject, $body, $attachment_path);
+$stmt->bind_param("issssss", $id, $subject, $body, $attachment_path, $fromname, $fromemail, $campainname);
 
 if ($stmt->execute()) {
     echo json_encode(["status" => "success", "message" => "Draft saved successfully"]);
@@ -51,4 +47,3 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-?>

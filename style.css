@@ -28,31 +28,11 @@
     color: green;
 }
 
-#composeBtn {
-    position: fixed;
-    right: 1.5rem;
-    bottom: 2rem;
-}
-
 svg {
     width: 1.5rem;
     height: 1.5rem;
 }
 
-.table-responsive {}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-tbody {
-    display: block;
-    height: 300px;
-    /* Adjust this height as needed */
-    overflow-y: auto;
-    width: 100%;
-}
 
 thead, tbody tr {
     display: table;
@@ -62,12 +42,24 @@ thead, tbody tr {
 
 .equal_tr td {
     overflow-x: hidden;
-    width: 33.33%;
+    width: 20%;
 }
 
-::-webkit-scrollbar {
-    width: 2px;
+.equal_tr .id_row {
+    width: 10%;
 }
+
+.equal_tr .name_row {
+    width: 30%;
+}
+
+.equal_tr .act_row {
+    width: 15%;
+}
+
+/* ::-webkit-scrollbar {
+    width: 2px;
+} */
 
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
@@ -80,3 +72,82 @@ thead, tbody tr {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.loader {
+    border: 6px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 6px solid #3498db;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+    position: fixed;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -45%);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.swal2-content {
+    position: relative;
+}
+
+iframe {
+    padding-top: 1rem;
+}
+
+.search-box {
+    position: relative;
+    width: 400px;
+}
+
+.btnsearch {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1rem;
+}
+
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    padding: .5rem;
+}
+
+.dropdown-menu li {
+    position: relative;
+}
+
+.dropdown-menu .dropdown-submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: -7px;
+}
+
+.dropdown-menu .dropdown-submenu-left {
+    right: 100%;
+    left: auto;
+}
+
+.dropdown-menu>li:hover>.dropdown-submenu {
+    display: block;
+}
+.swal2-styled{
+    font-size: 1rem;
+}
+/* .camptable tr:nth-child(1){
+    font-weight: bold;
+} */

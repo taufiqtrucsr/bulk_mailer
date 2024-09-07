@@ -1,16 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "testing";
+include("connection.php");
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+$sql = "DELETE FROM customer";
+$conn->query($sql);
 
 $error_message = '';
 $success_message = '';
@@ -82,4 +74,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     exit();
 }
-?>
+
